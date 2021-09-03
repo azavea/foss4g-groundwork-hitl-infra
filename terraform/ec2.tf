@@ -19,5 +19,5 @@ resource "aws_key_pair" "notebook_server_key_pair" {
 }
 
 output "instance_ips" {
-  value = aws_instance.notebook_server.public_ip
+  value = aws_instance.notebook_server.*.public_ip
 }
