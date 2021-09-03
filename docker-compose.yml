@@ -7,7 +7,7 @@ services:
       - $HOME/.aws:/root/.aws
       - .:/opt/src
     entrypoint: 
-      - sh
-    working_dir: /opt/src
+      - terraform
+    working_dir: /opt/src/terraform
     environment:
       - AWS_PROFILE
