@@ -11,3 +11,11 @@ services:
     working_dir: /opt/src/terraform
     environment:
       - AWS_PROFILE
+  ansible:
+    image: willhallonline/ansible:2.10-alpine-3.12
+    volumes:
+      - $HOME/.ssh:/root/.ssh
+      - .:/opt/src
+    entrypoint:
+      - ansible
+    working_dir: /opt/src/ansible

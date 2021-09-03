@@ -2,3 +2,5 @@ variables.secret
 .terraform*
 tfplan
 *.tfstate*
+inventory
+secrets.vault

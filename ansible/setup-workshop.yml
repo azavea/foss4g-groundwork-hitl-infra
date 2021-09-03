@@ -1,0 +1,6 @@
+---
+- name: Install docker
+  import_playbook: ansible-docker/docker.yml
+
+- name: Pull dependencies
+  import_playbook: ansible-workshop/data-dependencies.yml

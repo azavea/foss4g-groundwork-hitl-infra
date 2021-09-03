@@ -1,0 +1,28 @@
+---
+- hosts: all
+  remote_user: ubuntu
+  become: yes
+  tasks:
+
+    - name: Install AWS CLI
+      apt:
+        name: awscli
+        state: present
+        update_cache: yes
+
+    - name: Pull Raster Vision container image
+      shell: docker pull quay.io/azavea/raster-vision:pytorch-0.12
+
+    - name: Create workshop directory
+      shell: mkdir "$HOME/workshop "
+
+    - name: Pull GeoTIFF from s3
+      shell: aws s3 cp s3://rasterfoundry-production-data-us-east-1/demo-cogs/jacksonville.sub.tiff workshop/
+      environment:
+        AWS_ACCESS_KEY: "{{ aws_access_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+
+    - name: Download example notebook
+      get_url:
+        url: https://gist.githubusercontent.com/jisantuc/6486b377f7144125d4b9b0100b7d6b2a/raw/cbf50a67feef86ee48e34b2f61ff80afbd87f530/effects.md
+        dest: $HOME/workshop/foss4g-notebook.ipynb
