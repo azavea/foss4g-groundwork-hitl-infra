@@ -3,4 +3,4 @@ variables.secret
 tfplan
 *.tfstate*
 inventory
-secrets.vault
+secrets.*
