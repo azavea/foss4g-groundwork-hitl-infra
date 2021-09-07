@@ -9,6 +9,22 @@
 
     - name: Upgrade all apt packages
       apt: upgrade=yes
+    
+    - name: Mount block store
+      shell: |
+        mkfs.ext4 -E nodiscard /dev/nvme1n1
+        mkdir -p /mnt/data
+        mount -t ext4 -o defaults,nofail /dev/nvme1n1 /mnt/data
+      args:
+        creates: /mnt/data
+
+    - name: Configure docker home
+      shell: |
+        mkdir -p /mnt/data/.docker
+        mkdir -p /etc/docker
+        echo '{"data-root": "/mnt/data/.docker"}' > /etc/docker/daemon.json
+      args:
+        creates: /etc/docker/daemon.json
 
     - name: Install dependencies
       apt:
