@@ -10,9 +10,6 @@
         state: present
         update_cache: yes
 
-    - name: Pull Raster Vision container image
-      shell: docker pull quay.io/azavea/raster-vision:pytorch-0.12
-
     - name: Create workshop directory
       file:
         path: /mnt/data/workshop
@@ -20,13 +17,31 @@
         owner: ubuntu
         group: ubuntu
 
+    - name: Clone repo with the workshop notebook
+      git:
+        repo: https://github.com/azavea/foss4g-groundwork-hitl-infra.git
+        dest: /mnt/data/workshop/materials
+        clone: yes
+
+    - name: Clone special Raster Vision branch
+      git:
+        repo: https://github.com/jisantuc/raster-vision.git
+        dest: /mnt/data/workshop/raster-vision
+        version: foss4g
+        clone: yes
+
+    - name: Pull Raster Vision container
+      shell: |
+        docker pull jisantuc/raster-vision-pytorch
+        docker tag jisantuc/raster-vision-pytorch raster-vision-pytorch 
+
     - name: Pull GeoTIFF from s3
-      shell: aws s3 cp s3://rasterfoundry-production-data-us-east-1/demo-cogs/jacksonville.sub.tif /mnt/data/workshop/
+      shell: aws s3 cp s3://rasterfoundry-production-data-us-east-1/demo-data/jacksonville.sub.tif /mnt/data/workshop/materials/
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
         AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
 
-    - name: Download example notebook
-      get_url:
-        url: https://gist.githubusercontent.com/jisantuc/6486b377f7144125d4b9b0100b7d6b2a/raw/cbf50a67feef86ee48e34b2f61ff80afbd87f530/effects.md
-        dest: /mnt/data/workshop/foss4g-notebook.ipynb
+    - name: Start notebook server
+      shell: RASTER_VISION_NOTEBOOK_DIR=/mnt/data/workshop/materials docker/run --jupyter
+      args:
+        chdir: /mnt/data/workshop/raster-vision
