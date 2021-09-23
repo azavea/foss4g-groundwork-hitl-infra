@@ -39,6 +39,16 @@ resource "aws_security_group_rule" "allow_ssh" {
   security_group_id = aws_security_group.notebook_server_sg.id
 }
 
+resource "aws_security_group_rule" "allow_egress" {
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks      = ["0.0.0.0/0"]
+  ipv6_cidr_blocks = ["::/0"]
+  security_group_id = aws_security_group.notebook_server_sg.id
+}
+
 resource "aws_key_pair" "notebook_server_key_pair" {
   public_key = var.notebook_server_public_key
   key_name   = "foss4g_notebook_server_key"
