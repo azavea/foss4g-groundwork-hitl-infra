@@ -18,4 +18,4 @@ You can create and configure the EC2 instances with the following steps:
   - create a `yaml` file at `ansible/secrets.yaml` with `aws_access_key_id` and `aws_secret_access_key` objects with your keys
   - encrypt that file from inside the  using `ansible-vault`: `ansible-vault encrypt --output secrets.enc secrets.yaml`
   - delete your plain text yaml file
-- run the playbook: `ansible-playbook -e @secrets.enc -i inventory --private-key /root/.ssh/your-key-here setup-workshop.yml`
+- run the playbook: `ansible-playbook -e @secrets.enc --ask-vault-pass -i inventory --private-key /root/.ssh/your-key-here setup-workshop.yml`

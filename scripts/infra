@@ -33,6 +33,10 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
         fmt)
             docker-compose run --rm terraform fmt
             ;;
+	    destroy)
+            docker-compose run --rm terraform destroy \
+                -var-file="variables.secret"
+            ;;
         *)
             echo "ERROR: I don't have support for that Terraform subcommand!"
             exit 1
