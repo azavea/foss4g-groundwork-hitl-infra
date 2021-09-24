@@ -5,6 +5,6 @@ with import <nixpkgs> {};
 	  python = python39.withPackages(ps: with ps; [ requests black ]);
 	in
 		pkgs.mkShell {
-		name = "NAME";
+		name = "copy-campaigns";
 		buildInputs = [ python ];
 	}
