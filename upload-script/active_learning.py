@@ -12,7 +12,7 @@ from rastervision.pytorch_backend import *
 from rastervision.pytorch_learner import *
 from rastervision.pytorch_backend.examples.utils import read_stac
 
-image_uri = './jacksonville.sub.tif'
+image_uri = '../jacksonville.sub.tif'
 
 
 def get_config(runner, output_dir: str, stac_export_uri: str,
