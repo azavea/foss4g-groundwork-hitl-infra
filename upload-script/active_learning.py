@@ -22,6 +22,7 @@ def get_config(runner, output_dir: str, stac_export_uri: str,
 
     Args:
         runner (Runner): Runner for the pipeline. Will be provided by RV.
+        stac_export_uri (str): URI of the STAC export.
         output_dir (str): Directory where all the output will be written.
 
     Returns:
@@ -31,7 +32,6 @@ def get_config(runner, output_dir: str, stac_export_uri: str,
     scene_infos = read_stac(stac_export_uri, stac_unzip_dir)
 
     chip_sz = int(kwargs.get('chip_sz', 300))
-    img_sz = int(kwargs.get('img_sz', chip_sz))
 
     def make_scene(id: str, info: dict) -> SceneConfig:
         return SceneConfig(
@@ -63,18 +63,16 @@ def get_config(runner, output_dir: str, stac_export_uri: str,
             for i, info in enumerate(scene_infos)[:1]
         ])
 
-    data = ClassificationGeoDataConfig(
-        scene_dataset=scene_dataset,
-        window_opts=GeoDataWindowConfig(
-            method=GeoDataWindowMethod.random,
-            size=chip_sz,
-            max_windows=int(kwargs.get('chips_per_scene', 100)),
-        ),
-        img_sz=img_sz,
-        num_workers=4)
-
     backend = PyTorchChipClassificationConfig(
-        data=data,
+        data=ClassificationGeoDataConfig(
+            scene_dataset=scene_dataset,
+            window_opts=GeoDataWindowConfig(
+                method=GeoDataWindowMethod.random,
+                size=chip_sz,
+                max_windows=int(kwargs.get('chips_per_scene', 100)),
+            ),
+            img_sz=chip_sz,
+            num_workers=4),
         model=ClassificationModelConfig(
             backbone=Backbone.resnet18,
             init_weights=kwargs.get('init_weights', None)),
@@ -89,7 +87,6 @@ def get_config(runner, output_dir: str, stac_export_uri: str,
         root_uri=output_dir,
         dataset=scene_dataset,
         backend=backend,
-        train_chip_sz=chip_sz,
-        predict_chip_sz=300)
+        predict_chip_sz=chip_sz)
 
     return pipeline
