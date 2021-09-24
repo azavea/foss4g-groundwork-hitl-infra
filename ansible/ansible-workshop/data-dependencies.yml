@@ -40,6 +40,24 @@
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
         AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+      args:
+        creates: /mnt/data/workshop/materials/jacksonville.sub.tif
+
+    - name: Pull model weights from s3
+      shell: aws s3 cp s3://rasterfoundry-production-data-us-east-1/demo-data/init_weights.pth /mnt/data/workshop/materials/
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+      args:
+        creates: /mnt/data/workshop/materials/init_weights.pth
+
+    - name: Pull initial predictions from s3
+      shell: aws s3 cp s3://rasterfoundry-production-data-us-east-1/demo-data/base-predictions.json /mnt/data/workshop/materials/
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+      args:
+        creates: /mnt/data/workshop/materials/base-predictions.json
 
     - name: Start notebook server
       shell: RASTER_VISION_NOTEBOOK_DIR=/mnt/data/workshop/materials docker/run --jupyter
