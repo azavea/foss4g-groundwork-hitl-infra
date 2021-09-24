@@ -29,6 +29,7 @@
         dest: /mnt/data/workshop/raster-vision
         version: foss4g
         clone: yes
+        force: yes
 
     - name: Pull Raster Vision container
       shell: |
