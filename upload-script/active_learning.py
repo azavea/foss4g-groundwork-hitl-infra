@@ -60,7 +60,7 @@ def get_config(runner, output_dir: str, stac_export_uri: str,
         ],
         validation_scenes=[
             make_scene(id=f'val-{i}', info=info)
-            for i, info in enumerate(scene_infos)[:1]
+            for i, info in enumerate(scene_infos[:1])
         ])
 
     backend = PyTorchChipClassificationConfig(
