@@ -36,13 +36,29 @@
         docker pull jisantuc/raster-vision-pytorch
         docker tag jisantuc/raster-vision-pytorch raster-vision-pytorch 
 
-    - name: Pull GeoTIFF from s3
+    - name: Pull training GeoTIFF from s3
       shell: aws s3 cp s3://rasterfoundry-production-data-us-east-1/demo-data/jacksonville.sub.tif /mnt/data/workshop/materials/
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
         AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
       args:
         creates: /mnt/data/workshop/materials/jacksonville.sub.tif
+
+    - name: Pull validation GeoTIFF from s3
+      shell: aws s3 cp 's3://rasterfoundry-production-data-us-east-1/user-uploads/auth0|57eace85f1d4528f0dc85457/779d524b-5608-43af-b276-a67063aa2276/clipped-jacksonville-2016.tiff' /mnt/data/workshop/materials/
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+      args:
+        creates: /mnt/data/workshop/materials/clipped-jacksonville-2016.tif
+
+    - name: Pull validation STAC export from s3
+      shell: aws s3 cp 's3://rasterfoundry-production-data-us-east-1/stac-exports/7ed8af13-15dc-49b0-b723-95de44a9faef/catalog.zip' /mnt/data/workshop/materials/validation-export.zip
+      environment: 
+        AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+      args:
+        creates: /mnt/data/workshop/materials/validation-export.zip
 
     - name: Pull model weights from s3
       shell: aws s3 cp s3://rasterfoundry-production-data-us-east-1/demo-data/init_weights.pth /mnt/data/workshop/materials/
