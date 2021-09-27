@@ -13,7 +13,7 @@ from rastervision.pytorch_learner import *
 from rastervision.pytorch_backend.examples.utils import read_stac
 
 train_image_uri = '../jacksonville.sub.tif'
-val_image_uri = '../clipped-jacksonville-2016.tif'
+val_image_uri = '../clipped-jacksonville-2016.tiff'
 
 
 def get_config(runner, output_dir: str, stac_export_uri: str,
@@ -32,7 +32,7 @@ def get_config(runner, output_dir: str, stac_export_uri: str,
     train_stac_unzip_dir = f'./tmp/{Path(stac_export_uri).stem}'
     train_scene_infos = read_stac(stac_export_uri, train_stac_unzip_dir)
 
-    val_stac_export_uri = kwargs(
+    val_stac_export_uri = kwargs.get(
         'val_stac_export_uri',
         '../validation-export.zip')
     val_stac_unzip_dir = f'./tmp/val/{Path(val_stac_export_uri).stem}'
