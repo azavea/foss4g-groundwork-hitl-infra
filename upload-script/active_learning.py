@@ -12,8 +12,8 @@ from rastervision.pytorch_backend import *
 from rastervision.pytorch_learner import *
 from rastervision.pytorch_backend.examples.utils import read_stac
 
-train_image_uri = './jacksonville.sub.tif'
-val_image_uri = '/mnt/data/workshop/materials/clipped-jacksonville-2016.tif'
+train_image_uri = '../jacksonville.sub.tif'
+val_image_uri = '../clipped-jacksonville-2016.tif'
 
 
 def get_config(runner, output_dir: str, stac_export_uri: str,
