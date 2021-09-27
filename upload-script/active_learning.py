@@ -12,7 +12,8 @@ from rastervision.pytorch_backend import *
 from rastervision.pytorch_learner import *
 from rastervision.pytorch_backend.examples.utils import read_stac
 
-image_uri = '../jacksonville.sub.tif'
+train_image_uri = './jacksonville.sub.tif'
+val_image_uri = '/mnt/data/workshop/materials/clipped-jacksonville-2016.tif'
 
 
 def get_config(runner, output_dir: str, stac_export_uri: str,
@@ -28,12 +29,18 @@ def get_config(runner, output_dir: str, stac_export_uri: str,
     Returns:
         ChipClassificationConfig: A pipeline config.
     """
-    stac_unzip_dir = f'./tmp/{Path(stac_export_uri).stem}'
-    scene_infos = read_stac(stac_export_uri, stac_unzip_dir)
+    train_stac_unzip_dir = f'./tmp/{Path(stac_export_uri).stem}'
+    train_scene_infos = read_stac(stac_export_uri, train_stac_unzip_dir)
+
+    val_stac_export_uri = kwargs(
+        'val_stac_export_uri',
+        '/mnt/data/workshop/materials/validation-export.zip')
+    val_stac_unzip_dir = f'./tmp/val/{Path(val_stac_export_uri).stem}'
+    val_scene_infos = read_stac(stac_export_uri, val_stac_unzip_dir)
 
     chip_sz = int(kwargs.get('chip_sz', 300))
 
-    def make_scene(id: str, info: dict) -> SceneConfig:
+    def make_scene(id: str, image_uri: str, info: dict) -> SceneConfig:
         return SceneConfig(
             id=id,
             raster_source=RasterioSourceConfig(
@@ -55,12 +62,12 @@ def get_config(runner, output_dir: str, stac_export_uri: str,
     scene_dataset = DatasetConfig(
         class_config=class_config,
         train_scenes=[
-            make_scene(id=f'train-{i}', info=info)
-            for i, info in enumerate(scene_infos)
+            make_scene(id=f'train-{i}', image_uri=train_image_uri, info=info)
+            for i, info in enumerate(train_scene_infos)
         ],
         validation_scenes=[
-            make_scene(id=f'val-{i}', info=info)
-            for i, info in enumerate(scene_infos[:1])
+            make_scene(id=f'val-{i}', image_uri=val_image_uri, info=info)
+            for i, info in enumerate(val_scene_infos)
         ])
 
     backend = PyTorchChipClassificationConfig(
