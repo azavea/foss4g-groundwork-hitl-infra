@@ -34,7 +34,7 @@ def get_config(runner, output_dir: str, stac_export_uri: str,
 
     val_stac_export_uri = kwargs(
         'val_stac_export_uri',
-        '/mnt/data/workshop/materials/validation-export.zip')
+        '../validation-export.zip')
     val_stac_unzip_dir = f'./tmp/val/{Path(val_stac_export_uri).stem}'
     val_scene_infos = read_stac(stac_export_uri, val_stac_unzip_dir)
 
