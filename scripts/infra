@@ -24,8 +24,8 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
             rm -rf .terraform terraform.tfstate*
             docker-compose run --rm terraform init
             docker-compose run --rm terraform plan \
-                -var-file="variables.secret" \
                 -out="tfplan"
+                
             ;;
         apply)
             docker-compose run --rm terraform apply tfplan
