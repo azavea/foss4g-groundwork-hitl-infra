@@ -12,7 +12,7 @@ You can create and configure the EC2 instances with the following steps:
 
 - ~~create a file called `variables.secret` with a public key in the `notebook_server_public_key` variable and some integer in the `instance_count` variable.~~
 - change the `default` variable in `terraform/variables.tf` to reflect the number of instances you want (temporary)
-- run `./scripts/infra plan` and `./scripts/infra apply` to create the EC2 instances. You will be prompted to enter a `notebook_server_public_key` (.pub)
+- run `./scripts/infra plan` and `./scripts/infra apply` to create the EC2 instances. You will be prompted to enter a `notebook_server_public_key` (entire contents of id_rsa.pub) without quotes
 - copy the list of IPs into new `ansible/inventory` file e.g.:
     ```
     [instance_ips]
@@ -22,7 +22,12 @@ You can create and configure the EC2 instances with the following steps:
 - console into the ansible container: `docker-compose run --rm --entrypoint sh ansible`
 - create a secrets file with some AWS credentials (these will be used to pull a tif from s3 into the EC2 instance):
   - create a `yaml` file at `ansible/secrets.yaml` with `aws_access_key_id` and `aws_secret_access_key` objects with your keys
-  - encrypt that file from inside the  using `ansible-vault`: `ansible-vault encrypt --output secrets.enc secrets.yaml`
+  ```yaml
+  aws_access_key_id: "xxxx..."
+  aws_secret_access_key: "xxxx..."
+  ```
+  - encrypt that file from inside the  using `ansible-vault`: `ansible-vault encrypt --output secrets.enc secrets.yaml`, you will be prompted to create a password that you will use in a later step
   - delete your plain text yaml file
-- run the playbook: `ansible-playbook -e @secrets.enc --ask-vault-pass -i inventory --private-key /root/.ssh/[[your-key-here]] setup-wrkshop.yml`
-- users can access notebook at `https://{ip address}:8888`
+- run the playbook: `ansible-playbook -e @secrets.enc --ask-vault-pass -i inventory --private-key /root/.ssh/{name of private key file (e.g. id_rsa)} setup-workshop.yml`
+- users can access notebook at `https://{ip address}:8888`, password for notebooks is `foss4g2021`
+- make sure to shut down and delete ec2 instances when done
