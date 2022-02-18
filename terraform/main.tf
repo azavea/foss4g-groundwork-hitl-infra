@@ -14,7 +14,7 @@ provider "aws" {
   default_tags {
     tags = {
       Environment = "FOSS4G"
-      Owner       = "James Santucci"
+      Owner       = "Simon Kassel"
       Project     = "GroundWork HITL RV Workflow"
     }
   }

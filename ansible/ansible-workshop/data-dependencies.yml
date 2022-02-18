@@ -3,7 +3,6 @@
   remote_user: ubuntu
   become: yes
   tasks:
-
     - name: Install AWS CLI
       apt:
         name: awscli
@@ -20,6 +19,7 @@
     - name: Clone repo with the workshop notebook
       git:
         repo: https://github.com/azavea/foss4g-groundwork-hitl-infra.git
+        version: ogc-workshop
         dest: /mnt/data/workshop/materials
         clone: yes
 
@@ -34,7 +34,7 @@
     - name: Pull Raster Vision container
       shell: |
         docker pull jisantuc/raster-vision-pytorch
-        docker tag jisantuc/raster-vision-pytorch raster-vision-pytorch 
+        docker tag jisantuc/raster-vision-pytorch raster-vision-pytorch
 
     - name: Pull training GeoTIFF from s3
       shell: aws s3 cp s3://rasterfoundry-production-data-us-east-1/demo-data/jacksonville.sub.tif /mnt/data/workshop/materials/
@@ -54,7 +54,7 @@
 
     - name: Pull validation STAC export from s3
       shell: aws s3 cp 's3://rasterfoundry-production-data-us-east-1/demo-data/foss4g-2021-validation-catalog.zip' /mnt/data/workshop/materials/validation-export.zip
-      environment: 
+      environment:
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
         AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
       args:
