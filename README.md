@@ -31,6 +31,6 @@ You can create and configure the EC2 instances with the following steps:
   ```
   - encrypt that file from inside the  using `ansible-vault`: `ansible-vault encrypt --output secrets.enc secrets.yaml`, you will be prompted to create a password that you will use in a later step
   - delete your plain text yaml file
-- run the playbook: `ansible-playbook -e @secrets.enc --ask-vault-pass -i inventory --private-key /root/.ssh/{name of private key file (e.g. id_rsa)} setup-workshop.yml`
-- users can access notebook at `https://{ip address}:8888`, password for notebooks is `foss4g2021`
+- run the playbook: `ansible-playbook -e @secrets.enc --ask-vault-pass -i inventory --private-key /root/.ssh/{name of private key file (e.g. id_rsa)} setup-workshop.yml`. Note that your `$HOME/.ssh` dir has been mounted to `/root/.ssh`.
+- users can access notebook at `https://{ip address}:8888`, password for notebooks is `ogc2022`
 - make sure to shut down and delete ec2 instances when done
