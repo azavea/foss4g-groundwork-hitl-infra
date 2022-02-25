@@ -10,9 +10,12 @@ Its purpose is to create a bunch of identical EC2 instances capable of running a
 
 You can create and configure the EC2 instances with the following steps:
 
-- ~~create a file called `variables.secret` with a public key in the `notebook_server_public_key` variable and some integer in the `instance_count` variable.~~
-- change the `default` variable in `terraform/variables.tf` to reflect the number of instances you want (temporary)
-- run `./scripts/infra plan` and `./scripts/infra apply` to create the EC2 instances. You will be prompted to enter a `notebook_server_public_key` (entire contents of id_rsa.pub) without quotes
+- create a file called `variables.secret` with a public key in the `notebook_server_public_key` variable and some integer in the `instance_count` variable. This should have the syntax of a .tfvars file (see https://www.terraform.io/language/values/variables#variable-definitions-tfvars-files for details). Example:
+  ```
+  instance_count = 2
+  notebook_server_public_key = "ssh-rsa ..."
+  ```
+- run `./scripts/infra plan` and `./scripts/infra apply` to create the EC2 instances
 - copy the list of IPs into new `ansible/inventory` file e.g.:
     ```
     [instance_ips]
@@ -28,6 +31,6 @@ You can create and configure the EC2 instances with the following steps:
   ```
   - encrypt that file from inside the  using `ansible-vault`: `ansible-vault encrypt --output secrets.enc secrets.yaml`, you will be prompted to create a password that you will use in a later step
   - delete your plain text yaml file
-- run the playbook: `ansible-playbook -e @secrets.enc --ask-vault-pass -i inventory --private-key /root/.ssh/{name of private key file (e.g. id_rsa)} setup-workshop.yml`
-- users can access notebook at `https://{ip address}:8888`, password for notebooks is `foss4g2021`
+- run the playbook: `ansible-playbook -e @secrets.enc --ask-vault-pass -i inventory --private-key /root/.ssh/{name of private key file (e.g. id_rsa)} setup-workshop.yml`. Note that your `$HOME/.ssh` dir has been mounted to `/root/.ssh`.
+- users can access notebook at `https://{ip address}:8888`, password for notebooks is `ogc2022`
 - make sure to shut down and delete ec2 instances when done

@@ -25,16 +25,16 @@
 
     - name: Clone special Raster Vision branch
       git:
-        repo: https://github.com/jisantuc/raster-vision.git
+        repo: https://github.com/adeelh/raster-vision.git
         dest: /mnt/data/workshop/raster-vision
-        version: foss4g
+        version: ogc2022
         clone: yes
         force: yes
 
     - name: Pull Raster Vision container
       shell: |
-        docker pull jisantuc/raster-vision-pytorch
-        docker tag jisantuc/raster-vision-pytorch raster-vision-pytorch
+        docker pull quay.io/azavea/raster-vision:pytorch-e9182ab
+        docker tag quay.io/azavea/raster-vision:pytorch-e9182ab raster-vision-pytorch
 
     - name: Pull training GeoTIFF from s3
       shell: aws s3 cp s3://rasterfoundry-production-data-us-east-1/demo-data/jacksonville.sub.tif /mnt/data/workshop/materials/
